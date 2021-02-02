@@ -22,6 +22,7 @@ public class AddOreProperties
 	public int maxHeight = 64;
 	public int retrogen = 0;
 	public boolean squared = true;
+	public int distributionType = 0;
 	public final WorldgenEntryList biomes = new WorldgenEntryList();
 	public final WorldgenEntryList spawnsIn = new WorldgenEntryList();
 

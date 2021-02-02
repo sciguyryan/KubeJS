@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfi
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RangeDecoratorConfiguration;
 import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.placement.DepthAverageConfigation;
 import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
@@ -88,7 +89,17 @@ public class WorldgenAddEventJS extends EventJS
 
 		ConfiguredFeature<OreConfiguration, ?> oreConfig = (properties.noSurface ? Feature.NO_SURFACE_ORE : Feature.ORE).configured(new OreConfiguration(properties.spawnsIn.blacklist ? new InvertRuleTest(ruleTest1) : ruleTest1, properties._block, properties.clusterMaxSize));
 
-		oreConfig = UtilsJS.cast(oreConfig.decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(properties.minHeight, 0, properties.maxHeight))));
+		// 0 will set the generator to use the depth-average. This was originally the default setting and is used to generate Lapis ore.
+		// 1 will set the generator to use range average, which is used to generate the other ore types.
+		if (properties.distributionType == 0)
+		{
+			oreConfig = UtilsJS.cast(oreConfig.decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(properties.minHeight, 0, properties.maxHeight))));
+		}
+		else
+		{
+			oreConfig = UtilsJS.cast(oreConfig.decorated(FeatureDecorator.DEPTH_AVERAGE.configured(new DepthAverageConfigation(properties.minHeight, properties.maxHeight))));
+		}
+		
 		oreConfig = UtilsJS.cast(oreConfig.count(UniformInt.of(properties.clusterMinCount, properties.clusterMaxCount - properties.clusterMinCount)));
 
 		if (properties.chance > 0)
