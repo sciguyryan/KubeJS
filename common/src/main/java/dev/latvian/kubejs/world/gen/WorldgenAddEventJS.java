@@ -89,8 +89,8 @@ public class WorldgenAddEventJS extends EventJS
 
 		ConfiguredFeature<OreConfiguration, ?> oreConfig = (properties.noSurface ? Feature.NO_SURFACE_ORE : Feature.ORE).configured(new OreConfiguration(properties.spawnsIn.blacklist ? new InvertRuleTest(ruleTest1) : ruleTest1, properties._block, properties.clusterMaxSize));
 
-		// 0 will set the generator to use the depth-average. This was originally the default setting and is used to generate Lapis ore.
-		// 1 will set the generator to use range average, which is used to generate the other ore types.
+		// 0 will set the generator to use range-average. This was originally the default setting. It is used to generate Lapis Lazuli ore.
+		// 1 will set the generator to use depth-average. This is used to generate all of the other ore types.
 		if (properties.distributionType == 0)
 		{
 			oreConfig = UtilsJS.cast(oreConfig.decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(properties.minHeight, 0, properties.maxHeight))));
@@ -99,7 +99,7 @@ public class WorldgenAddEventJS extends EventJS
 		{
 			oreConfig = UtilsJS.cast(oreConfig.decorated(FeatureDecorator.DEPTH_AVERAGE.configured(new DepthAverageConfigation(properties.minHeight, properties.maxHeight))));
 		}
-		
+
 		oreConfig = UtilsJS.cast(oreConfig.count(UniformInt.of(properties.clusterMinCount, properties.clusterMaxCount - properties.clusterMinCount)));
 
 		if (properties.chance > 0)
